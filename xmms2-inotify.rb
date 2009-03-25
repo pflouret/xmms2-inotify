@@ -135,24 +135,24 @@ class Xmms2Inotify
       paths = []
       Find.find(path) { |p| paths.insert(0, p) }
       paths.each do |p|
-         @log.info "adding #{path}"
          @xc.medialib_add_entry("file://#{p}")
+         @log.info "adding #{p}"
       end
    end
 
    def rehash(id, path)
-      @log.info "rehashing #{id} #{path}"
       @xc.medialib_rehash(id)
+      @log.info "rehashing #{id} #{path}"
    end
 
    def remove(id, path="")
-      @log.info "removed \##{id} #{path}"
       @xc.medialib_entry_remove(id)
+      @log.info "removed \##{id} #{path}"
    end
 
    def move(id, path)
-      @log.info "moving \##{id} to #{path}"
       @xc.medialib_entry_move(id, "file://#{path}")
+      @log.info "moving \##{id} to #{path}"
    end
 
    def get_id(path)
