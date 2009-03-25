@@ -86,13 +86,13 @@ class Xmms2Inotify
          file.sync = true
       end
       @log = Logger.new(file)
-      @log.level = (@options[:verbose] and Logger::DEBUG or Logger::INFO)
+      @log.level = @options[:verbose] && Logger::DEBUG || Logger::INFO
       @log.datetime_format = "%Y-%m-%d %H:%M:%S"
       print msg
    end
 
    def read_watch_dirs
-      path = (@options[:watch_file] or File.join(CONFIG_DIR, "watch_dirs"))
+      path = @options[:watch_file] || File.join(CONFIG_DIR, "watch_dirs")
       begin
          File.open(path) do |f|
             f.each_line do |line|
@@ -160,8 +160,8 @@ class Xmms2Inotify
       c = Xmms::Collection.parse(%(url:"#{url}"))
 
       r = @xc.coll_query_ids(c).wait
-      ids = (r.value unless (r.nil? or r.error?)) or []
-      (ids[0] unless ids.nil? or ids.empty?) or nil
+      ids = (r.value unless r.nil? || r.error?) || []
+      (ids[0] unless ids.nil? || ids.empty?) || nil
    end
 
    def watch
@@ -177,7 +177,7 @@ class Xmms2Inotify
 
          have_events = @notify.wait_for_events(5)
 
-         unless last_was_moved_from or moved_from.empty?
+         unless last_was_moved_from || moved_from.empty?
             unclaimed_moved_from.concat(moved_from)
             moved_from = []
          end
@@ -188,7 +188,7 @@ class Xmms2Inotify
          if ticks == 5
             # remove songs moved out of the watched folders periodically
             unclaimed_moved_from.each do |e|
-               e.kind_of?(Numeric) and remove(e) or remove(e[0])
+               e.kind_of?(Numeric) && remove(e) || remove(e[0])
             end
             unclaimed_moved_from = []
             ticks = 0
@@ -215,7 +215,7 @@ class Xmms2Inotify
                      c = Xmms::Collection.parse(%(url:"#{url}/*"))
 
                      r = @xc.coll_query_info(c, ['id', 'url']).wait
-                     infos = (r.value unless (r.nil? or r.error?)) or []
+                     infos = (r.value unless r.nil? || r.error?) || []
                      infos.each do |d|
                         moved_from.push([d[:id], CGI.unescape(d[:url].sub(url+'/', ''))])
                      end
