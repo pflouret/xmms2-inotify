@@ -123,6 +123,15 @@ class Xmms2Inotify
    end
 
    def add(path)
+      if File.directory?(path)
+         # wait for a while, in case it's a slow copy or whatever, not even
+         # close to bulletproof
+         sleep(20)
+         watch_desc = @notify.add_watch(path, FLAGS)
+         @watched[watch_desc] = File.expand_path(path)
+         @log.info "watching #{@watched[watch_desc]}"
+      end
+
       paths = []
       Find.find(path) { |p| paths.insert(0, p) }
       paths.each do |p|
