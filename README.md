@@ -11,7 +11,7 @@ warned.
 Install
 -------
 
-    sudo gem install rinotify &&
+    sudo gem install RInotify &&
     wget http://github.com/palbo/xmms2-inotify/raw/master/xmms2-inotify.rb &&
     chmod 755 xmms2-inotify.rb &&
     sudo mv xmms2-inotify.rb /usr/local/bin/xmms2-inotify.rb &&
